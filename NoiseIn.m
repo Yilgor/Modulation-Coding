@@ -1,16 +1,15 @@
 function [Wn, SNRin] = NoiseIn(S, F, Fs, Alpha, Bt, N)
     
     % INPUT
-        % S = Signal d'entré.
-        % F = Fréquence symbole.
-        % Fs = Fréquence d'échantillonnage Matlab.
-        % Alpha => Relaton Eb = No*Alpha avec Alpha donné en dB.
-        % Bt = Bande passante.
-        % N = Nombre de symboles émis.
+        % S = Input signal
+        % F = Symbol frequency.
+        % Fs = Sample frequency
+        % Alpha => Relation Eb = No*Alpha with Alpha in dB.
+        % Bt = Bandwidth
+        % N = Number of symbol
     % OUTPUT
-        % Wn = Bruit blanc additif gaussien.
-        % SNRin = Rapport puissance de signal sur 
-        % puissance de bruit à l’entrée du démodulateur.
+        % Wn = Additive White Gaussian Noise (AWGN)
+        % SNRin = Input SNR
         
     % Fonction simulant le bruit blanc additif gaussien (AWGN) 
     % à l'entrée du démodulateur.
