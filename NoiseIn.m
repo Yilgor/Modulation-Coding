@@ -17,8 +17,8 @@ function [Wn] = NoiseIn(S, F, Fs, SNR, Bt, N)
     
     %%%%%% Calcul de la puissance du signal reçu à l'entré du recepteur Pe.
     %Pe = sum(S.^2)/length(S);
-    %Pe = sum(S.^2)/Fs;
-    Pe = (1/Fs)*trapz(S.^2);
+    Pe = sum(S.^2)/Fs;
+    %Pe = (1/Fs)*trapz(S.^2);
     
     %%%%%% Calcul de la puissance du bruit Pn.
     Eb = Pe/F;
