@@ -1,39 +1,36 @@
-function [Wn] = NoiseIn(S, F, Fs, SNR, Bt, N)
+function [Wn] = NoiseIn(S, Fs, Fsample, Ratio, Ns)
     
     % INPUT
-        % S = Input signal
-        % F = Symbol frequency.
-        % Fs = Sample frequency
-        % SNR => Relation 2E = No*SNR with SNR given in dB.
-        % Bt = Bandwidth
-        % N = Number of symbol
+        % S       : Input signal.
+        % Fs      : Symbol frequency.
+        % Fsample : Sample frequency.
+        % Ratio   : Vector of ratios. ratio = Eb/No given in dB.
+        % Ns      : Number of symbol = Number of encoded bits.
     % OUTPUT
-        % Wn = Additive White Gaussian Noise (AWGN)
-        % SNRin = Input SNR
+        % Wn      : Additive White Gaussian Noise (AWGN).
         
-    % Fonction simulant le bruit blanc additif gaussien (AWGN) 
-    % à l'entrée du démodulateur.
-    % (plus précisément, en sortie du modulateur FM).
+    % Function that simulates the Additive White Gaussian Noise (AWGN).
     
-    %%%%%% Calcul de la puissance du signal reçu à l'entré du recepteur Pe.
+    %%%%%% Computation of the power of the input signal.
     %Pe = sum(S.^2)/length(S);
-    Pe = sum(S.^2)/Fs;
-    %Pe = (1/Fs)*trapz(S.^2);
+    Pe = (1/Fsample)*trapz(abs(S).^2);
     
-    %%%%%% Calcul de la puissance du bruit Pn.
-    Eb = Pe/F;
-        % Eb = L'énergie d'un bit.
-        % 1/F = T = Durée d'un bit.
-    No = Eb/(10^(SNR/10));
-        % No = Densité spectrale de puissance ([No] = W/Hz).
-        % SNR [dB] = 10*log10(Eb/No)
-        % <=> Eb/No = 10^(SNR/10)
-        % <=> No = Eb/(10^(SNR/10))
-    Pn = (No/2)*Fs;
+    %%%%%% Computation of the power of the noise.
+    Eb = Pe/Fs;
+        % Eb = Energy of one bit.
+        % 1/Fs = Ts = Duration of one bit (Symbol duration).
+    Eb = Eb/2;
+        % Divided by a factor 2 because the power is expressed for a
+        % bandpass signal (see slide 32 of "Signal representaton").
+    No = Eb./(10.^(Ratio./10));
+        % No = Power spectral density ([No] = W/Hz).
+        % ratio [dB] = 10*log10(Eb/No)
+        % <=> Eb/No = 10^(ratio/10)
+        % <=> No = Eb/(10^(ratio/10))
+    Pn = 2*No*Fsample;
 
-    %%%%%% Calcul du signal bruité.
-    Wn = sqrt(Pn)*randn([1, N*Fs/F]);
-        % Le bruit est de même longueur que le signal d'entré
-        % pour pouvoir les additionner.
-
+    %%%%%% Computation of the noise signal.
+    %Wn = sqrt(Pn/2)*randn([1, N*Fs/F])*(1+1i);
+    Wn = sqrt(Pn/2)*(randn([1, Ns*Fsample/Fs])+1i*randn([1, Ns*Fsample/Fs]));
+        % Bandpass representation of the signal (noise).
 end
