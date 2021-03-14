@@ -28,7 +28,7 @@ function [Wn] = NoiseIn(S, Fs, Fsample, Ratio, Ns)
         % <=> Eb/No = 10^(ratio/10)
         % <=> No = Eb/(10^(ratio/10))
     Pn = 2*No*Fsample;
-
+ 
     %%%%%% Computation of the noise signal.
     %Wn = sqrt(Pn/2)*randn([1, N*Fs/F])*(1+1i);
     Wn = sqrt(Pn/2)*(randn([1, Ns*Fsample/Fs])+1i*randn([1, Ns*Fsample/Fs]));
